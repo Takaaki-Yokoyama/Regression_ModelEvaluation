@@ -1,0 +1,15 @@
+# 回帰モデルと評価指標の設定
+regression_models:
+  - LinearRegression
+  - ElasticNet
+  - DecisionTreeRegressor
+  - RandomForestRegressor
+  - GradientBoostingRegressor
+  # - SVR
+
+metrics:
+  - r2
+  # - rmse
+  # - mae
+# 目的変数の数（列の最後尾が目的変数）
+target_count: 1

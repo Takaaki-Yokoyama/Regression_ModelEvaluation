@@ -1,0 +1,22 @@
+[
+  {
+    "model": "LinearRegression",
+    "r2": 0.5511467928438727
+  },
+  {
+    "model": "ElasticNet",
+    "r2": 0.5547830555954167
+  },
+  {
+    "model": "DecisionTreeRegressor",
+    "r2": 0.8228901238259155
+  },
+  {
+    "model": "RandomForestRegressor",
+    "r2": 0.8441777336219547
+  },
+  {
+    "model": "GradientBoostingRegressor",
+    "r2": 0.8824164388326381
+  }
+]
