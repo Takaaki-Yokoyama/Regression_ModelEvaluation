@@ -2,16 +2,19 @@ import os
 import sys
 import pickle
 import numpy as np
-from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.metrics import (
+    r2_score,
+    mean_squared_error,
+    mean_absolute_error,
+    make_scorer,
+)
+from sklearn.model_selection import KFold, cross_validate
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 # パスを追加してpreprocessをimport
 sys.path.append(os.path.dirname(__file__))
 from preprocess import load_data, load_config, preprocess_data
-
-METRIC_FUNCS = {
-    'r2': r2_score,
-    'rmse': lambda y_true, y_pred: np.sqrt(mean_squared_error(y_true, y_pred)),
-    'mae': mean_absolute_error
-}
+from train import MODEL_DICT
 
 def main():
     base_dir = os.path.dirname(os.path.dirname(__file__))
@@ -24,25 +27,46 @@ def main():
     target_count = config.get('target_count', 1)
     model_names = config.get('regression_models', ['LinearRegression'])
     metrics = config.get('metrics', ['r2'])
+    cv_folds = config.get('cv_folds', 5)
 
     df = load_data(data_path)
     X_train, X_test, y_train, y_test = preprocess_data(df, target_count=target_count)
+    # クロスバリデーション用に全データを結合
+    X = np.concatenate([X_train, X_test])
+    y = np.concatenate([y_train, y_test])
+
+    # 評価指標のscorer作成
+    scorers = {
+        'r2': make_scorer(r2_score),
+        'rmse': make_scorer(
+            lambda yt, yp: np.sqrt(mean_squared_error(yt, yp)), greater_is_better=False
+        ),
+        'mae': make_scorer(mean_absolute_error, greater_is_better=False),
+    }
+
+    cv = KFold(n_splits=cv_folds, shuffle=True, random_state=42)
 
     results = []
     for name in model_names:
-        model_path = os.path.join(models_dir, f'{name}.pkl')
-        if not os.path.exists(model_path):
-            print(f"モデルファイルがありません: {model_path}")
+        model_cls = MODEL_DICT.get(name)
+        if model_cls is None:
+            print(f"未対応モデル: {name}")
             continue
-        with open(model_path, 'rb') as f:
-            model = pickle.load(f)
-        y_pred = model.predict(X_test)
+        model = model_cls()
+        pipeline = Pipeline([
+            ('scaler', StandardScaler()),
+            ('model', model),
+        ])
+
+        use_metrics = [m for m in metrics if m in scorers]
+        cv_result = cross_validate(pipeline, X, y, cv=cv, scoring={m: scorers[m] for m in use_metrics})
         res = {'model': name}
-        for metric in metrics:
-            func = METRIC_FUNCS.get(metric)
-            if func:
-                score = func(y_test, y_pred)
-                res[metric] = score
+        for metric in use_metrics:
+            scores = cv_result[f'test_{metric}']
+            if metric in ['rmse', 'mae']:
+                res[metric] = (-scores).mean()
+            else:
+                res[metric] = scores.mean()
         results.append(res)
     # 結果表示
     for r in results:
