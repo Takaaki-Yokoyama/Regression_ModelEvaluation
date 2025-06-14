@@ -23,20 +23,43 @@ def plot_metrics(results_path):
     with open(results_path, 'r', encoding='utf-8') as f:
         results = json.load(f)
     df = pd.DataFrame(results)
-    metrics = [col for col in df.columns if col != 'model']
-    df.set_index('model', inplace=True)
-    df[metrics].plot(kind='bar', figsize=(10, 6))
-    plt.title('各モデルの評価指標')
-    plt.ylabel('スコア')
-    plt.xlabel('モデル')
-    plt.tight_layout()
-    # 画像保存
-    results_dir = os.path.join(os.path.dirname(results_path), 'results')
-    os.makedirs(results_dir, exist_ok=True)
-    out_path = os.path.join(results_dir, 'metrics_bar.png')
-    plt.savefig(out_path)
-    print(f'評価指標グラフを保存しました: {out_path}')
-    plt.close()
+    # 複数ターゲット対応: model, targetごとに指標をプロット
+    if 'target' in df.columns:
+        metrics = [col for col in df.columns if col not in ['model', 'target']]
+        for metric in metrics:
+            plt.figure(figsize=(10, 6))
+            sns.barplot(
+                data=df,
+                x='model',
+                y=metric,
+                hue='target',
+                palette='Set2'
+            )
+            plt.title(f'各モデル・ターゲットの{metric}指標')
+            plt.ylabel(metric)
+            plt.xlabel('モデル')
+            plt.tight_layout()
+            results_dir = os.path.join(os.path.dirname(results_path), 'results')
+            os.makedirs(results_dir, exist_ok=True)
+            out_path = os.path.join(results_dir, f'metrics_bar_{metric}.png')
+            plt.savefig(out_path)
+            print(f'評価指標グラフ({metric})を保存しました: {out_path}')
+            plt.close()
+    else:
+        # 旧来の単一ターゲット用
+        metrics = [col for col in df.columns if col != 'model']
+        df.set_index('model', inplace=True)
+        df[metrics].plot(kind='bar', figsize=(10, 6))
+        plt.title('各モデルの評価指標')
+        plt.ylabel('スコア')
+        plt.xlabel('モデル')
+        plt.tight_layout()
+        results_dir = os.path.join(os.path.dirname(results_path), 'results')
+        os.makedirs(results_dir, exist_ok=True)
+        out_path = os.path.join(results_dir, 'metrics_bar.png')
+        plt.savefig(out_path)
+        print(f'評価指標グラフを保存しました: {out_path}')
+        plt.close()
 
 # 予測値vs実測値の散布図
 import pickle

@@ -12,17 +12,17 @@
   {
     "model": "DecisionTreeRegressor",
     "target": 0,
-    "r2": 0.4229282134628291
+    "r2": 0.43355122106774735
   },
   {
     "model": "RandomForestRegressor",
     "target": 0,
-    "r2": 0.6582416020421388
+    "r2": 0.6674784933367596
   },
   {
     "model": "GradientBoostingRegressor",
     "target": 0,
-    "r2": 0.6600908106400619
+    "r2": 0.6618932554559124
   },
   {
     "model": "LinearRegression",
@@ -37,16 +37,16 @@
   {
     "model": "DecisionTreeRegressor",
     "target": 1,
-    "r2": 0.46705430914746626
+    "r2": 0.5081254809549497
   },
   {
     "model": "RandomForestRegressor",
     "target": 1,
-    "r2": 0.6922840936283339
+    "r2": 0.6970656060232323
   },
   {
     "model": "GradientBoostingRegressor",
     "target": 1,
-    "r2": 0.6876456055733022
+    "r2": 0.6894617541427195
   }
 ]
