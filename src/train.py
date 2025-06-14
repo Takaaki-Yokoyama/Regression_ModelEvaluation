@@ -1,12 +1,17 @@
 # モデル学習用
 
 import os
+import sys
 import pickle
 from sklearn.linear_model import LinearRegression, ElasticNet
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
-from src.preprocess import load_data, load_config, preprocess_data
+import numpy as np
+
+# sys.pathにsrcディレクトリを追加
+sys.path.append(os.path.dirname(__file__))
+from preprocess import load_data, load_config, preprocess_data
 
 MODEL_DICT = {
     'LinearRegression': LinearRegression,
@@ -31,17 +36,28 @@ def main():
     df = load_data(data_path)
     X_train, X_test, y_train, y_test = preprocess_data(df, target_count=target_count)
 
+    y_train = np.array(y_train)
+
     for name in model_names:
         model_cls = MODEL_DICT.get(name)
         if model_cls is None:
             print(f"未対応モデル: {name}")
             continue
-        model = model_cls()
-        model.fit(X_train, y_train)
-        model_path = os.path.join(models_dir, f'{name}.pkl')
-        with open(model_path, 'wb') as f:
-            pickle.dump(model, f)
-        print(f"{name} を保存しました: {model_path}")
+        if target_count > 1:
+            for idx in range(target_count):
+                model = model_cls()
+                model.fit(X_train, y_train[:, idx])
+                model_path = os.path.join(models_dir, f'{name}_target{idx}.pkl')
+                with open(model_path, 'wb') as f:
+                    pickle.dump(model, f)
+                print(f"{name} (target{idx}) を保存しました: {model_path}")
+        else:
+            model = model_cls()
+            model.fit(X_train, y_train)
+            model_path = os.path.join(models_dir, f'{name}.pkl')
+            with open(model_path, 'wb') as f:
+                pickle.dump(model, f)
+            print(f"{name} を保存しました: {model_path}")
 
 if __name__ == "__main__":
     main()

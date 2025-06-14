@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import os
@@ -31,6 +32,9 @@ def preprocess_data(df, target_count=1, standardize=True, test_size=0.2, random_
         X = scaler.fit_transform(X)
     # 訓練・テスト分割
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    # yをnumpy配列に変換（マルチターゲット対応）
+    y_train = np.array(y_train)
+    y_test = np.array(y_test)
     return X_train, X_test, y_train, y_test
 
 if __name__ == "__main__":

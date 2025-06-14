@@ -1,22 +1,52 @@
 [
   {
     "model": "LinearRegression",
-    "r2": 0.5511467928438727
+    "target": 0,
+    "r2": 0.6214096130707375
   },
   {
     "model": "ElasticNet",
-    "r2": 0.5547830555954167
+    "target": 0,
+    "r2": 0.5628220947349599
   },
   {
     "model": "DecisionTreeRegressor",
-    "r2": 0.8228901238259155
+    "target": 0,
+    "r2": 0.4229282134628291
   },
   {
     "model": "RandomForestRegressor",
-    "r2": 0.8441777336219547
+    "target": 0,
+    "r2": 0.6582416020421388
   },
   {
     "model": "GradientBoostingRegressor",
-    "r2": 0.8824164388326381
+    "target": 0,
+    "r2": 0.6600908106400619
+  },
+  {
+    "model": "LinearRegression",
+    "target": 1,
+    "r2": 0.5783957271294099
+  },
+  {
+    "model": "ElasticNet",
+    "target": 1,
+    "r2": 0.504431916008964
+  },
+  {
+    "model": "DecisionTreeRegressor",
+    "target": 1,
+    "r2": 0.46705430914746626
+  },
+  {
+    "model": "RandomForestRegressor",
+    "target": 1,
+    "r2": 0.6922840936283339
+  },
+  {
+    "model": "GradientBoostingRegressor",
+    "target": 1,
+    "r2": 0.6876456055733022
   }
 ]
