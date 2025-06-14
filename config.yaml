@@ -13,3 +13,4 @@ metrics:
   # - mae
 # 目的変数の数（列の最後尾が目的変数）
 target_count: 1
+cv_folds: 5

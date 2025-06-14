@@ -20,7 +20,7 @@ python main.py
 ```
 python src/train.py
 ```
-- モデルの評価（評価指標をresults.jsonに保存）
+- モデルの評価（クロスバリデーションを実施し、評価指標をresults.jsonに保存）
 ```
 python src/evaluate.py
 ```
@@ -42,4 +42,5 @@ python src/visualize.py
 
 ## 補足
 - config.yamlで使用モデルや評価指標を変更できます。
+- `cv_folds` を変更することでクロスバリデーションの分割数を指定できます。
 - データやモデルの形式に応じて`src/preprocess.py`を調整してください。
