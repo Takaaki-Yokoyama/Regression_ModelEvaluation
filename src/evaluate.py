@@ -2,6 +2,7 @@ import os
 import sys
 import pickle
 import numpy as np
+import pandas as pd
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.metrics import (
     r2_score,
@@ -105,11 +106,11 @@ def main():
     # 結果表示
     for r in results:
         print(r)
-    # 結果をJSONで保存
-    import json
-    results_path = os.path.join(base_dir, 'results.json')
-    with open(results_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+    # DataFrameに変換してCSV保存
+    results_path = os.path.join(base_dir, 'results.csv')
+    df_results = pd.DataFrame(results)
+    df_results.to_csv(results_path, index=False, encoding='utf-8')
+    print(f'評価結果を保存しました: {results_path}')
 
     # --- ベストモデルのフルデータ再学習・保存（ターゲットごと） ---
     if primary_metric:

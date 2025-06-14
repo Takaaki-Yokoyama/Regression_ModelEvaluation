@@ -1,0 +1,11 @@
+model,target,r2
+LinearRegression,0,0.6214096130707375
+ElasticNet,0,0.5628220947349599
+DecisionTreeRegressor,0,0.3986978078522222
+RandomForestRegressor,0,0.6627822707251798
+GradientBoostingRegressor,0,0.6617542821330301
+LinearRegression,1,0.5783957271294099
+ElasticNet,1,0.504431916008964
+DecisionTreeRegressor,1,0.47580766102197075
+RandomForestRegressor,1,0.7086411244388303
+GradientBoostingRegressor,1,0.6908354645143706

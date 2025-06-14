@@ -20,7 +20,7 @@ python main.py
 ```
 python src/train.py
 ```
-- モデルの評価（クロスバリデーションを実施し、評価指標をresults.jsonに保存。最良モデルはmodels/best_model.pklとして保存されます）
+ - モデルの評価（クロスバリデーションを実施し、評価指標をresults.csvに保存。最良モデルはmodels/best_model.pklとして保存されます）
 ```
 python src/evaluate.py
 ```
@@ -45,7 +45,7 @@ pytest
 - data/data.csv : 入力データ
 - config.yaml : 設定ファイル
 - models/ : 学習済みモデル（best_model.pkl含む）
-- results.json : 評価結果
+ - results.csv : 評価結果
 - src/ : スクリプト群
 - main.py : 一括実行用スクリプト
 - tests/ : テストコード
