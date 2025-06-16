@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -19,10 +18,7 @@ from preprocess import load_data, load_config, preprocess_data
 # 評価指標の棒グラフ
 
 def plot_metrics(results_path):
-    import os
-    with open(results_path, 'r', encoding='utf-8') as f:
-        results = json.load(f)
-    df = pd.DataFrame(results)
+    df = pd.read_csv(results_path)
     # 複数ターゲット対応: model, targetごとに指標をプロット
     if 'target' in df.columns:
         metrics = [col for col in df.columns if col not in ['model', 'target']]
@@ -114,6 +110,6 @@ def plot_pred_vs_true():
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.dirname(__file__))
-    results_path = os.path.join(base_dir, 'results.json')
+    results_path = os.path.join(base_dir, 'results.csv')
     plot_metrics(results_path)
     plot_pred_vs_true()
